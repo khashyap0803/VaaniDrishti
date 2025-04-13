@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">VaaniDrishti</string>
+    <string name="capture_currency_note">Capture Currency Note</string>
+    <string name="currency_result_default">Currency detection results will appear here</string>
+    <string name="capture_now">Capture Now</string>
+    <string name="auto_capture_countdown">Auto-capture in: %d seconds</string>
+    <string name="capturing">Capturing…</string>
+    <string name="processing_image">Processing image…</string>
+    <string name="error_capturing">Error capturing image</string>
+    <string name="camera_init_failed">Camera initialization failed</string>
+    <string name="unrecognized_currency">Unable to recognize currency note. Please try again.</string>
+    <string name="currency_detected">%1$s detected with %2$d%% confidence</string>
+</resources>

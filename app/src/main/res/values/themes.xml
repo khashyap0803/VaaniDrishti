@@ -1,0 +1,11 @@
+<resources>
+    <style name="Theme.Cash" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here -->
+        <item name="colorPrimary">@color/light_brown</item>
+        <item name="colorPrimaryDark">@color/dark_chocolate</item>
+        <item name="colorAccent">@color/light_brown</item>
+        <item name="android:windowBackground">@color/dark_chocolate</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:statusBarColor">@color/light_brown</item>
+    </style>
+</resources>
