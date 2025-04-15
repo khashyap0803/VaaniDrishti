@@ -1,5 +1,7 @@
-2000 rupees
-500 rupees
-200 rupees
-100 rupees
-50 rupees
+100_rupees
+10_rupees
+200_rupees
+20_rupees
+500_rupees
+50_rupees
+no_currency

@@ -5,7 +5,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
-import android.speech.tts.UtteranceProgressListener
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
@@ -39,8 +38,8 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false) // Hide default title
 
-        // Initialize TTS with enhanced settings
-        initializeTTS()
+        // Initialize TTS
+        tts = TextToSpeech(this, this)
 
         resultTextView = findViewById(R.id.resultText)
 
@@ -55,27 +54,6 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
         // Check if started with results
         intent?.let { handleIntentData(it) }
-    }
-
-    private fun initializeTTS() {
-        tts = TextToSpeech(this, this)
-        tts.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
-            override fun onStart(utteranceId: String?) {
-                // Speech started
-            }
-
-            override fun onDone(utteranceId: String?) {
-                // Speech completed
-            }
-
-            @Deprecated("Deprecated in Java", ReplaceWith("onError(utteranceId, -1)"))
-            override fun onError(utteranceId: String?) {
-                // Error occurred
-                runOnUiThread {
-                    Toast.makeText(this@MainActivity, "TTS error occurred", Toast.LENGTH_SHORT).show()
-                }
-            }
-        })
     }
 
     private fun checkCameraPermission(): Boolean {
@@ -121,51 +99,33 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         val resultText = intent.getStringExtra("RESULT_TEXT")
         resultText?.let { text ->
             resultTextView.text = text
-
-            // Format text for better speech clarity
-            val speechText = formatTextForSpeech(text)
-            speak(speechText)
+            speak(formatTextForSpeech(text))
         }
     }
 
     private fun formatTextForSpeech(text: String): String {
-        // Replace "rupees" with "Indian rupees" for clarity
         var formattedText = text
-
-        // Format currency for better pronunciation
-        formattedText = formattedText.replace("2000 rupees", "two thousand Indian rupees")
-        formattedText = formattedText.replace("500 rupees", "five hundred Indian rupees")
-        formattedText = formattedText.replace("200 rupees", "two hundred Indian rupees")
-        formattedText = formattedText.replace("100 rupees", "one hundred Indian rupees")
-        formattedText = formattedText.replace("50 rupees", "fifty Indian rupees")
-
-        // Add pauses for better speech clarity
+        formattedText = formattedText.replace("2000_rupees", "two thousand Indian rupees")
+        formattedText = formattedText.replace("500_rupees", "five hundred Indian rupees")
+        formattedText = formattedText.replace("200_rupees", "two hundred Indian rupees")
+        formattedText = formattedText.replace("100_rupees", "one hundred Indian rupees")
+        formattedText = formattedText.replace("50_rupees", "fifty Indian rupees")
+        formattedText = formattedText.replace("20_rupees", "twenty Indian rupees")
+        formattedText = formattedText.replace("10_rupees", "ten Indian rupees")
+        formattedText = formattedText.replace("no_currency", "No currency detected")
         formattedText = formattedText.replace(" detected with ", ", detected with ")
-
         return formattedText
-    }
-
-    override fun onNewIntent(intent: Intent) {
-        super.onNewIntent(intent)
-        handleIntentData(intent)
     }
 
     override fun onInit(status: Int) {
         if (status == TextToSpeech.SUCCESS) {
-            // Set language for TTS
             val result = tts.setLanguage(Locale.US)
             if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
                 Toast.makeText(this, "Language not supported for TTS", Toast.LENGTH_SHORT).show()
             } else {
                 ttsReady = true
-
-                // Set speech rate slightly slower for better clarity
                 tts.setSpeechRate(0.85f)
-
-                // Set pitch slightly higher
                 tts.setPitch(1.1f)
-
-                // Check if we need to announce anything immediately
                 intent?.let { handleIntentData(it) }
             }
         } else {
@@ -175,18 +135,8 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     private fun speak(text: String) {
         if (ttsReady) {
-            // First announcement - flush any previous speech
-            val utteranceId = "currencyAnnouncement"
-            tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, utteranceId)
-
-            // Add a pause between announcements
-            tts.playSilentUtterance(1500, TextToSpeech.QUEUE_ADD, "pause")
-
-            // Repeat the announcement
-            val repeatUtteranceId = "repeatCurrencyAnnouncement"
-            tts.speak(text, TextToSpeech.QUEUE_ADD, null, repeatUtteranceId)
+            tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, "currencyAnnouncement")
         } else {
-            // Queue for when TTS is ready
             Toast.makeText(this, "Preparing speech...", Toast.LENGTH_SHORT).show()
         }
     }

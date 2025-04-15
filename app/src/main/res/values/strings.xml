@@ -11,4 +11,10 @@
     <string name="camera_init_failed">Camera initialization failed</string>
     <string name="unrecognized_currency">Unable to recognize currency note. Please try again.</string>
     <string name="currency_detected">%1$s detected with %2$d%% confidence</string>
+    <string name="model_load_error">Error: Could not load model</string>
+    <string name="capture_failed">Failed to capture image</string>
+    <string name="capture_failed_with_reason">Capture failed: %1$s</string>
+    <string name="no_currency_recognized">No currency recognized. Please try again.</string>
+    <string name="error_processing_image">Error processing image: %1$s</string>
+    <string name="processing">Processing…</string>
 </resources>
